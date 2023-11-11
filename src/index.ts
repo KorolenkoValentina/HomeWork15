@@ -6,11 +6,11 @@
 
     Під час продажу квитка, Каса додає дані про відвідувача у два списки: поточні відвідувачі та клієнти.*/
 
-interface Ticket {
+export interface Ticket {
   getCost(): number;
 }
 
-class AdultTicket implements Ticket {
+export class AdultTicket implements Ticket {
   private cost: number;
 
   constructor(cost: number) {
@@ -22,7 +22,7 @@ class AdultTicket implements Ticket {
   }
 }
 
-class ChildTicket implements Ticket {
+export class ChildTicket implements Ticket {
   private cost: number;
 
   constructor(cost: number) {
@@ -34,7 +34,7 @@ class ChildTicket implements Ticket {
   }
 }
 
-class FamilyTicket implements Ticket {
+export class FamilyTicket implements Ticket {
   private cost: number;
 
   constructor(cost: number) {
@@ -45,7 +45,7 @@ class FamilyTicket implements Ticket {
     return this.cost;
   }
 }
-class TicketFactory {
+export class TicketFactory {
   createTicket(type: string, cost: number): Ticket {
     switch(type) {
       case 'adult':
@@ -68,15 +68,15 @@ class TicketFactory {
 
     Можливість оповіщення відвідувачів за 15 хвилин до закриття і перед відходом.*/
 
-interface Person {
+export interface Person {
   getName(): string;
   getContactInfo(): string;
 }
-interface Observer {
+export interface Observer {
   update(message: string): void;
 }
 
-class Visitor implements Person, Observer {
+export class Visitor implements Person, Observer {
   private name: string;
   private contactInfo: string;
     
@@ -86,7 +86,7 @@ class Visitor implements Person, Observer {
   }
     
   getName() {
-        return this.name;
+    return this.name;
   }
     
   getContactInfo() {
@@ -98,7 +98,7 @@ class Visitor implements Person, Observer {
   }
 }
 
-class CurrentVisitors {
+export class CurrentVisitors {
   private observers: Observer[] = [];
 
   addVisitor(visitor: Visitor) {
@@ -127,7 +127,7 @@ class CurrentVisitors {
   Відділ реклами використовує цей список для розсилки новин про зоопарк і рекламні акції.*/
 
 
-class Client implements Person {
+export class Client implements Person {
   private name: string;
   private contactInfo: string;
     
@@ -146,7 +146,7 @@ class Client implements Person {
 }
 
 
-class TicketOffice {
+export class TicketOffice {
   private currentVisitors: CurrentVisitors;
   private advertisingDepartment: AdvertisingDepartment;
   private revenue: Revenue;
@@ -176,12 +176,12 @@ class TicketOffice {
 
   Використовує список клієнтів для розсилки новин про зоопарк і рекламні акції.*/
 
-interface Department {
+export interface Department {
   sendPromotions(): void;
 }
   
 
-class AdvertisingDepartment implements Department {
+export class AdvertisingDepartment implements Department {
   private clients: Client[] = [];
 
   addClient(client: Client) {
@@ -201,12 +201,12 @@ class AdvertisingDepartment implements Department {
 Каса збирає дані про виручку за день.
 
 Ці дані передаються в Бухгалтерію.*/
-interface RevenueData {
+export interface RevenueData {
   date: string;
   amount: number;
 }
 
-class Revenue {
+export class Revenue {
   private dailyRevenue: RevenueData[] = [];
 
   addToDailyRevenue(date: string, amount: number) {
@@ -221,12 +221,12 @@ class Revenue {
 
 
 
-class Payment {
+export class Payment {
   private amount: number;
     
   constructor(amount: number) {
     this.amount = amount;
-    }
+  }
 }
 /*"Бухгалтерія":
 
@@ -238,11 +238,11 @@ class Payment {
 
     Можливість генерувати фінансові звіти.*/
 
-interface FinancialManagement {
+export interface FinancialManagement {
   generateFinancialReports(): void;
 }
     
-class Accounting implements FinancialManagement {
+export class Accounting implements FinancialManagement {
   private employees: Employee[] = [];
   private animals: Animal[] = [];
   private payments: Payment[] = [];
@@ -260,7 +260,7 @@ class Accounting implements FinancialManagement {
     
 
   // Метод для розрахунку загальних витрат
-  private calculateTotalExpenses(): number {
+  private calculateTotalExpenses(): number{
     let totalExpenses = 0;
 
     // Розрахунок витрат на зарплати співробітників
@@ -290,7 +290,7 @@ class Accounting implements FinancialManagement {
   }
 
 
-  generateFinancialReports() {
+  generateFinancialReports(): void {
     // Ваша логіка для генерації фінансових звітів
     const totalExpenses = this.calculateTotalExpenses();
     const profit = this.totalRevenue - totalExpenses;
@@ -312,7 +312,7 @@ class Accounting implements FinancialManagement {
 
 
 
-class Administration {
+export class Administration {
   private employees: Employee[] = [];
   private animals: Animal[] = [];
   private promotions: string[] = [];
@@ -352,7 +352,7 @@ class Administration {
 /*"Тварини":
 
 Включає в себе інформацію про кожну тварину, таку як вид, ім'я, вік, здоров'я та інші характеристики.*/
-interface AnimalInfo {
+export interface AnimalInfo {
   getSpecies(): string;
   getName(): string;
   getAge(): number;
@@ -360,7 +360,7 @@ interface AnimalInfo {
   getFoodExpense(): number;
 }
 
-class Animal implements AnimalInfo {
+export class Animal implements AnimalInfo {
   private species: string;
   private name: string;
   private age: number;
@@ -405,7 +405,7 @@ class Animal implements AnimalInfo {
 
 Співробітники можуть мати різні посади та обов'язки, які слід враховувати.*/
 
-class Employee implements Person {
+export class Employee implements Person {
   private name: string;
   private position: string;
   private contactInfo: string;
@@ -439,7 +439,7 @@ class Employee implements Person {
 Бухгалтерія розпоряджається бюджетом і стежить за фінансами зоопарку.
 
 Можливість вести бюджетний облік і надавати фінансові звіти.*/
-class Budget implements FinancialManagement {
+export class Budget implements FinancialManagement {
   private amount: number;
   private animalsCost: number = 0;
   private employeeSalaries: number = 0;
