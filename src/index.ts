@@ -45,8 +45,10 @@ export class FamilyTicket implements Ticket {
     return this.cost;
   }
 }
+export type TicketType = 'adult' | 'child' | 'family';
+
 export class TicketFactory {
-  createTicket(type: string, cost: number): Ticket {
+  createTicket(type: TicketType, cost: number): Ticket {
     switch(type) {
       case 'adult':
         return new AdultTicket(cost);
@@ -55,7 +57,7 @@ export class TicketFactory {
       case 'family':
         return new FamilyTicket(cost);
       default:
-        throw new Error('Invalid ticket type');
+        throw new Error(`Invalid ticket type: ${type}`);
     }
   }
 }
@@ -64,9 +66,9 @@ export class TicketFactory {
 
 /*"Поточні відвідувачі":
 
-    Зберігає інформацію про відвідувачів, включаючи їхні імена та контактні дані.
+  Зберігає інформацію про відвідувачів, включаючи їхні імена та контактні дані.
 
-    Можливість оповіщення відвідувачів за 15 хвилин до закриття і перед відходом.*/
+  Можливість оповіщення відвідувачів за 15 хвилин до закриття і перед відходом.*/
 
 export interface Person {
   getName(): string;
@@ -94,7 +96,7 @@ export class Visitor implements Person, Observer {
   }
 
   update(message: string) {
-    console.log(`Отримано повідомлення: ${message}`);
+    console.log(`Message received: ${message}`);
   }
 }
 
@@ -107,13 +109,13 @@ export class CurrentVisitors {
 
   notifyVisitorsBeforeClosing() {
     this.observers.forEach(observer => {
-      observer.update("Зоопарк закривається через 15 хвилин.");
+      observer.update("The zoo closes in 15 minutes.");
     });
   }
 
   notifyVisitorsBeforeLeaving() {
     this.observers.forEach(observer => {
-      observer.update("Зоопарк зараз закриється. Дякуємо за відвідування!");
+      observer.update("The zoo will close now. Thank you for visiting!");
     });
   }
 }
@@ -159,9 +161,7 @@ export class TicketOffice {
 
   sellTicket(visitor: Visitor, ticket: Ticket) {
     const cost = ticket.getCost();
-    // Додати виручку до денної виручки
     this.revenue.addToDailyRevenue(new Date().toISOString(), cost);
-    // Додати відвідувача до списку поточних відвідувачів
     this.currentVisitors.addVisitor(visitor);
   }
 
@@ -190,7 +190,7 @@ export class AdvertisingDepartment implements Department {
 
   sendPromotions() {
     this.clients.forEach(client => {
-      console.log(`Розсилка рекламної акції клієнту ${client.getName()} на адресу ${client.getContactInfo()}`);
+      console.log(`Sending an advertising campaign to the client ${client.getName()} to the address ${client.getContactInfo()}`);
     });
   }
 }
@@ -258,7 +258,6 @@ export class Accounting implements FinancialManagement {
     this.totalRevenue = 0;
   }
     
-
   // Метод для розрахунку загальних витрат
   private calculateTotalExpenses(): number{
     let totalExpenses = 0;
@@ -269,9 +268,6 @@ export class Accounting implements FinancialManagement {
     // Розрахунок витрат на купівлю корму для тварин
     const foodExpenses = this.animals.reduce((total, animal) => total + this.getFoodExpense(animal), 0);
 
-    // Інші можливі витрати...
-
-    // Додавання всіх розрахунків до загальних витрат
     totalExpenses = salaries + foodExpenses;
 
     return totalExpenses;
@@ -284,20 +280,19 @@ export class Accounting implements FinancialManagement {
   private getFoodExpense(animal: Animal): number {
     return animal.getFoodExpense();
   }
-  // Метод для оновлення загального доходу
+  
   updateRevenue(amount: number) {
   this.totalRevenue += amount;
   }
 
 
   generateFinancialReports(): void {
-    // Ваша логіка для генерації фінансових звітів
     const totalExpenses = this.calculateTotalExpenses();
     const profit = this.totalRevenue - totalExpenses;
 
-    console.log(`Загальний прибуток: ${this.totalRevenue}`);
-    console.log(`Загальні витрати: ${totalExpenses}`);
-    console.log(`Прибуток: ${profit}`);
+    console.log(`Total profit: ${this.totalRevenue}`);
+    console.log(`General expenses: ${totalExpenses}`);
+    console.log(`Profit: ${profit}`);
   }
 }
 
@@ -309,7 +304,6 @@ export class Accounting implements FinancialManagement {
     Може додавати і видаляти співробітників і тварин.
 
     Створює сповіщення про рекламні акції та інші важливі події в зоопарку.*/
-
 
 
 export class Administration {
@@ -344,14 +338,15 @@ export class Administration {
   }
     
   createPromotions() {
-    this.promotions.push('Знижка на вхідні квитки у вихідні!');
+    this.promotions.push('Discount on entrance tickets on weekends!');
   }
 
 }
 
 /*"Тварини":
 
-Включає в себе інформацію про кожну тварину, таку як вид, ім'я, вік, здоров'я та інші характеристики.*/
+Включає в себе інформацію про кожну тварину, таку як вид, ім'я, вік, здоров'я 
+та інші характеристики.*/
 export interface AnimalInfo {
   getSpecies(): string;
   getName(): string;
@@ -394,8 +389,6 @@ export class Animal implements AnimalInfo {
     return this.foodExpense; 
   }
 }
-
-
 
 
 
@@ -450,15 +443,15 @@ export class Budget implements FinancialManagement {
 
   manageBudget() {
     if (this.amount >= this.animalsCost + this.employeeSalaries) {
-      console.log("Бюджет досить великий для утримання тварин та виплат співробітникам.");
+      console.log("The budget is large enough to keep animals and pay employees.");
     } else {
-      console.log("Бюджет недостатній для утримання тварин та виплат співробітникам.");
+      console.log("The budget is insufficient for keeping animals and paying employees.");
     }
   }
 
   generateFinancialReports() {
-    console.log(`Витрати на утримання тварин: ${this.animalsCost}`);
-    console.log(`Зарплати співробітникам: ${this.employeeSalaries}`);
+    console.log(`Expenses for keeping animals: ${this.animalsCost}`);
+    console.log(`Salaries to employees: ${this.employeeSalaries}`);
   }
   
   updateAnimalCost(cost: number) {
@@ -468,6 +461,61 @@ export class Budget implements FinancialManagement {
     this.employeeSalaries += salary;
   }
 }
+
+
+// Create instances of required classes
+const currentVisitors = new CurrentVisitors();
+const advertisingDepartment = new AdvertisingDepartment();
+const revenue = new Revenue();
+const accounting = new Accounting();
+const ticketOffice = new TicketOffice(currentVisitors, advertisingDepartment, revenue);
+
+// Create a visitor
+const visitor = new Visitor('Roman Dep', 'roman@example.com');
+
+// Sell a ticket to the visitor
+const ticketFactory = new TicketFactory();
+const adultTicket = ticketFactory.createTicket('adult', 20);
+ticketOffice.sellTicket(visitor, adultTicket);
+
+// Notify visitors before closing
+currentVisitors.notifyVisitorsBeforeClosing();
+
+// Create a client for the advertising department
+const client = new Client('RTY Company', 'info@rty.com');
+ticketOffice.addClient(client);
+
+// Send promotions to clients
+advertisingDepartment.sendPromotions();
+
+// Update revenue and send data to accounting
+revenue.sendToAccounting(accounting);
+
+// Generate financial reports
+accounting.generateFinancialReports();
+
+// Zoo administration actions
+const administration = new Administration();
+const employee = new Employee('Valya', 'Zookeeper', 'valya@example.com', 3000);
+administration.addEmployee(employee);
+
+const animal = new Animal('Zebra', 'Martin', 5, 'Good', 200);
+administration.addAnimal(animal);
+
+// Create promotions
+administration.createPromotions();
+
+// Get promotions
+const promotions = administration.getPromotions();
+console.log('Promotions:', promotions);
+
+// Budget management
+const budget = new Budget(5000);
+budget.updateAnimalCost(200);
+budget.updateEmployeeSalary(3000);
+budget.manageBudget();
+budget.generateFinancialReports();
+
 
 
 
